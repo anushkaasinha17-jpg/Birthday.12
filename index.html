@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy Birthday, Mayank 🎂</title>
+<meta name="description" content="A little birthday surprise, made with love." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= AMBIENT / GLOBAL LAYERS ================= -->
+<div class="bg-gradient" aria-hidden="true"></div>
+<canvas id="ambient-canvas" aria-hidden="true"></canvas>
+<div id="cursor-glow" aria-hidden="true"></div>
+<div id="cursor-trail" aria-hidden="true"></div>
+
+<!-- Floating Audio Player -->
+<div class="audio-player" id="audio-player" aria-hidden="true">
+  <button id="audio-toggle" class="audio-btn" aria-label="Play or pause music" disabled>
+    <svg id="icon-play" viewBox="0 0 24 24" class="icon"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="icon-pause" viewBox="0 0 24 24" class="icon hidden"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+  </button>
+  <div class="audio-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+</div>
+<audio id="bday-audio" loop preload="none">
+  <source src="music/happy-birthday.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Scroll progress -->
+<div class="scroll-progress" aria-hidden="true"><div id="scroll-progress-bar"></div></div>
+
+<!-- ================= SECRET MODAL ================= -->
+<div class="secret-modal-overlay" id="secret-modal" aria-hidden="true">
+  <div class="secret-modal glass-card">
+    <button class="secret-close" id="secret-close" aria-label="Close">&times;</button>
+    <p class="secret-emoji">💌</p>
+    <h2>You found the secret.</h2>
+    <p>Just like I found you — completely by chance, and completely worth it.<br>I love you, Mayank. ❤️</p>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- ================= 0. INTRO ================= -->
+<section id="intro" class="screen intro-screen">
+  <div class="intro-content">
+    <p class="eyebrow">a small gift, made slowly</p>
+    <h1 class="intro-title">Happy Birthday,<br><span class="accent">Mayank</span> <span class="heart-inline">❤️</span></h1>
+    <p class="intro-subtitle">A little surprise made with lots of love.</p>
+    <button id="open-gift-btn" class="ripple-btn">
+      <span>Open Your Gift</span>
+    </button>
+  </div>
+  <div class="scroll-hint" aria-hidden="true">
+    <span>scroll to begin</span>
+    <div class="scroll-hint-line"></div>
+  </div>
+</section>
+
+<!-- ================= 1. CAKE ================= -->
+<section id="cake" class="screen section-pad">
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+  <p class="eyebrow center">make a wish</p>
+  <h2 class="section-title center">One More Year, My Love</h2>
+  <p class="section-sub center">Blow out the candles — one wish for each year you make me luckier.</p>
+
+  <div class="cake-wrap">
+    <div class="cake" id="cake-el">
+      <div class="candles" id="candles">
+        <div class="candle" data-lit="true">
+          <div class="flame"></div>
+          <div class="wick"></div>
+          <div class="candle-stick"></div>
+        </div>
+        <div class="candle" data-lit="true">
+          <div class="flame"></div>
+          <div class="wick"></div>
+          <div class="candle-stick"></div>
+        </div>
+        <div class="candle" data-lit="true">
+          <div class="flame"></div>
+          <div class="wick"></div>
+          <div class="candle-stick"></div>
+        </div>
+      </div>
+      <div class="cake-layer top-layer">
+        <div class="drip d1"></div><div class="drip d2"></div><div class="drip d3"></div><div class="drip d4"></div>
+      </div>
+      <div class="cake-layer mid-layer"></div>
+      <div class="cake-layer base-layer"></div>
+      <div class="cake-plate"></div>
+    </div>
+  </div>
+  <p class="cake-hint" id="cake-hint">tap each candle ✨</p>
+</section>
+
+<!-- ================= 2. BLOOMING FLOWERS ================= -->
+<section id="garden-intro" class="screen section-pad">
+  <div class="petals-layer" id="petals-layer" aria-hidden="true"></div>
+  <div class="butterflies-layer" id="butterflies-layer" aria-hidden="true"></div>
+  <p class="eyebrow center">spring, always</p>
+  <h2 class="section-title center">Every Day, Something Blooms</h2>
+  <p class="section-sub center">Like these flowers, my love for you keeps opening — a little more, every single day.</p>
+
+  <div class="bloom-field" id="bloom-field">
+    <!-- flowers injected + static via CSS -->
+  </div>
+</section>
+
+<!-- ================= 3. LOVE LETTER ================= -->
+<section id="letter" class="screen section-pad">
+  <p class="eyebrow center">for you</p>
+  <h2 class="section-title center">A Letter I Mean Every Word Of</h2>
+  <div class="letter-card glass-card">
+    <p class="letter-signoff-top">My dearest Mayank,</p>
+    <div id="love-letter-body" class="letter-body">
+      <p>I want to start by telling you something simple: knowing you has made my life better. Not in a dramatic, cinematic way — in the quiet, daily way that matters more. In the way you remember the small things I mention once. In the way you show up, again and again, even on the days it would be easier not to. That kind of love is rare, and I don't take it for granted.</p>
+
+      <p>There's a particular kind of luck in finding someone whose presence makes ordinary days feel worth looking forward to. A random Tuesday becomes something good because I know I'll talk to you. A hard week becomes bearable because I know you're on the other end of it, rooting for me. I used to think love was supposed to be loud and dramatic. You taught me it's mostly steady — mostly showing up, mostly choosing each other on the boring days too. I'm endlessly grateful for that steadiness.</p>
+
+      <p>I am proud of you in ways I don't say often enough. I watch you work through hard things — the doubts, the pressure, the days when nothing seems to go right — and I see someone who keeps getting up anyway. That's not a small thing. That's character. Whatever you're building, whatever you're chasing, I hope you know I see the effort behind it, even when the results are slow to arrive. You don't have to prove anything to me. I'm already proud of who you are becoming, one imperfect day at a time.</p>
+
+      <p>I think about our future sometimes, in the unglamorous, specific way — not just grand trips or big milestones, but quiet mornings, inside jokes only we'll understand, the home we might build together someday, the version of us that's had more time to grow. I want to be there for the version of you that hasn't happened yet — the one with more confidence, more peace, more of the success you're working so hard for. I want a front row seat to that. Whatever shape our dreams take, individually or together, I hope we keep choosing to walk toward them side by side.</p>
+
+      <p>I also want you to know this: you don't have to be endlessly strong around me. You're allowed to be tired. You're allowed to not have it figured out. I'm not here for the highlight reel — I'm here for all of it, the good days and the heavy ones. If the world ever feels like too much, I hope you remember there is one person, at least, who is completely, unconditionally in your corner. That's me. That's not going to change.</p>
+
+      <p>So today, on your birthday, I hope you feel how much you're loved — not just by me, but for exactly who you are. Not the version people expect, not the version that has it all together — just you, as you actually are. I love your humor, your mind, the way you care about things quietly instead of announcing it. I love that being loved by you feels safe. I hope this year hands you more of what you deserve: peace when you need rest, momentum when you're ready to chase something, and people around you who see your worth as clearly as I do.</p>
+
+      <p>Thank you for being you. Thank you for choosing me, on ordinary days and hard ones. Whatever comes next, I'll be here, cheering loudly, quietly proud, endlessly grateful that out of everyone, it's you.</p>
+    </div>
+    <p class="letter-signoff">Always yours,<br><span class="signature">Me</span></p>
+  </div>
+</section>
+
+<!-- ================= 4. MEMORY TIMELINE ================= -->
+<section id="timeline" class="screen section-pad">
+  <p class="eyebrow center">our story, so far</p>
+  <h2 class="section-title center">Moments I Keep Coming Back To</h2>
+
+  <div class="timeline-wrap">
+    <div class="timeline-line" aria-hidden="true"></div>
+
+    <article class="timeline-card" data-side="left">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <div class="timeline-content glass-card">
+        <span class="timeline-tag">the beginning</span>
+        <h3>The Day We Met</h3>
+        <p>An ordinary moment that turned out to be the start of everything. I didn't know it then, but that was the day my life quietly changed direction.</p>
+      </div>
+    </article>
+
+    <article class="timeline-card" data-side="right">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <div class="timeline-content glass-card">
+        <span class="timeline-tag">still laughing about it</span>
+        <h3>Our Funniest Moment</h3>
+        <p>The one we bring up out of nowhere and still can't get through without laughing. Some jokes never get old — this is proof.</p>
+      </div>
+    </article>
+
+    <article class="timeline-card" data-side="left">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <div class="timeline-content glass-card">
+        <span class="timeline-tag">the best kind of tired</span>
+        <h3>Late Night Talks</h3>
+        <p>Hours that disappeared because we lost track of time talking about everything and nothing. Those conversations taught me who you really are.</p>
+      </div>
+    </article>
+
+    <article class="timeline-card" data-side="right">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <div class="timeline-content glass-card">
+        <span class="timeline-tag">what we're building toward</span>
+        <h3>Our Dreams</h3>
+        <p>The plans we say out loud and the ones we're still scared to. I want you to know — I'm holding onto every one of them with you.</p>
+      </div>
+    </article>
+
+    <article class="timeline-card" data-side="left">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <div class="timeline-content glass-card">
+        <span class="timeline-tag">what's next</span>
+        <h3>Future Adventures</h3>
+        <p>Every place we haven't been yet, every memory we haven't made yet. This is just the beginning of our story — I can't wait for the rest of it.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= 5. 30 REASONS ================= -->
+<section id="reasons" class="screen section-pad">
+  <p class="eyebrow center">just a few, out of infinite</p>
+  <h2 class="section-title center">30 Reasons I Love You</h2>
+  <p class="section-sub center">Tap a card to reveal each one.</p>
+
+  <div class="reasons-grid" id="reasons-grid" aria-label="30 reasons I love you, flip cards"></div>
+</section>
+
+<!-- ================= 6. INTERACTIVE GARDEN ================= -->
+<section id="interactive-garden" class="screen section-pad">
+  <p class="eyebrow center">plant something</p>
+  <h2 class="section-title center">Our Little Garden</h2>
+  <p class="section-sub center">Click or tap anywhere below to grow a flower — plant a whole garden if you like.</p>
+
+  <div class="garden-canvas-wrap glass-card">
+    <div id="garden-field" class="garden-field">
+      <p class="garden-empty-hint" id="garden-empty-hint">click anywhere here 🌱</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. NIGHT SKY ================= -->
+<section id="night-sky" class="screen section-pad night">
+  <canvas id="sky-canvas" aria-hidden="true"></canvas>
+  <div class="moon" aria-hidden="true"></div>
+  <p class="eyebrow center light">under the same sky</p>
+  <h2 class="section-title center light">Wherever You Are, I'm Looking Up Too</h2>
+  <p class="section-sub center light">Tap a star and watch a little piece of my heart float up to meet it.</p>
+</section>
+
+<!-- ================= 8. FINAL STATEMENT ================= -->
+<section id="final" class="screen section-pad final-screen">
+  <div class="final-card glass-card">
+    <p class="final-emoji">🎈</p>
+    <p class="final-text">
+      Happy Birthday, Mayank. Thank you for being you. May this year bring you endless happiness, success, peace, and dreams fulfilled. No matter where life takes us, I'll always be cheering for you. I hope this tiny little website reminds you how incredibly special you are. <span class="final-heart">❤️</span>
+    </p>
+    <p class="final-note">made with love, just for you</p>
+  </div>
+  <div class="final-hearts" id="final-hearts" aria-hidden="true"></div>
+</section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
